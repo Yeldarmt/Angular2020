@@ -15,6 +15,7 @@ export class CalculatorComponent implements OnInit {
   public text = '';
   public isOperationClicked = false;
   public isEqualClicked = false;
+  public savedNumber = '';
 
   ngOnInit(): void {
   }
@@ -203,6 +204,28 @@ export class CalculatorComponent implements OnInit {
     this.isOperationClicked = false;
     this.currentNum = '';
   }
-
+  memorySaveClick() {
+    console.log('curSavedNum', this.currentNum);
+    this.savedNumber = this.currentNum;
+  }
+  memoryReadClick() {
+    console.log('memRead', this.savedNumber);
+    this.firstNum = this.savedNumber;
+    this.currentNum = this.savedNumber;
+    this.text = this.mainService.putBrackets(this.savedNumber);
+  }
+  memoryPlusClick() {
+    console.log('memPlus', this.currentNum);
+    this.savedNumber = this.mainService.plusOperation(this.savedNumber, this.currentNum).toString();
+    console.log('savedNumAfterM+', this.savedNumber);
+  }
+  memoryMinusClick() {
+    console.log('memMinus', this.currentNum);
+    this.savedNumber = this.mainService.minusOperation(this.savedNumber, this.currentNum).toString();
+    console.log('savedNumAfterM-', this.savedNumber);
+  }
+  memoryClearClick() {
+    this.savedNumber = '';
+  }
 
 }
