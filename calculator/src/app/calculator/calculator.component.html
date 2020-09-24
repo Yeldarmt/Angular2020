@@ -22,9 +22,9 @@
     <div class="memory-btn d-flex mb-1">
       <button (click)="memoryClearClick()" [disabled]="!savedNumber">MC</button>
       <button (click)="memoryReadClick()" [disabled]="!savedNumber">MR</button>
-      <button (click)="memoryPlusClick()" [disabled]="!savedNumber || !currentNum">M+</button>
-      <button (click)="memoryMinusClick()" [disabled]="!savedNumber || !currentNum">M-</button>
-      <button (click)="memorySaveClick()"  [disabled]="!currentNum">MS</button>
+      <button (click)="memoryPlusClick()">M+</button>
+      <button (click)="memoryMinusClick()">M-</button>
+      <button (click)="memorySaveClick()">MS</button>
     </div>
     <div class="big-btn">
       <div class="d-flex">

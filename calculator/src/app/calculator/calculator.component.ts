@@ -125,11 +125,13 @@ export class CalculatorComponent implements OnInit {
     this.secondNum = '';
   }
   onClickEqual = () => {
+    if (!this.isEqualClicked && this.clickedOperation) {
+      this.text += '=';
+    }
     this.historyArray.push(this.clickedOperation);
     this.historyArray.push(this.currentNum);
     this.historyArray.push('=');
     const res = this.calcBasicOperation();
-    this.text += '=';
     this.firstNum = res.toString();
     this.currentNum = res.toString();
     this.isEqualClicked = true;
@@ -218,9 +220,12 @@ export class CalculatorComponent implements OnInit {
     this.isOperationClicked = false;
     this.currentNum = '';
     this.historyArray = [];
+    this.isEqualClicked = false;
   }
   memorySaveClick() {
-    this.savedNumber = this.currentNum;
+    if (this.currentNum) {
+      this.savedNumber = this.currentNum;
+    } else { this.savedNumber = '0'; }
   }
   memoryReadClick() {
     this.firstNum = this.savedNumber;
@@ -228,10 +233,26 @@ export class CalculatorComponent implements OnInit {
     this.text = this.mainService.putBrackets(this.savedNumber);
   }
   memoryPlusClick() {
-    this.savedNumber = this.mainService.plusOperation(this.savedNumber, this.currentNum).toString();
+    if (this.currentNum){
+      this.savedNumber = this.mainService.plusOperation(this.savedNumber, this.currentNum).toString();
+    } else {
+      if (this.savedNumber) {
+        this.savedNumber = this.mainService.plusOperation(this.savedNumber, '0').toString();
+      } else {
+        this.savedNumber = this.mainService.plusOperation('0', '0').toString();
+      }
+    }
   }
   memoryMinusClick() {
-    this.savedNumber = this.mainService.minusOperation(this.savedNumber, this.currentNum).toString();
+    if (this.currentNum){
+      this.savedNumber = this.mainService.minusOperation(this.savedNumber, this.currentNum).toString();
+    } else {
+      if (this.savedNumber) {
+        this.savedNumber = this.mainService.minusOperation(this.savedNumber, '0').toString();
+      } else {
+        this.savedNumber = this.mainService.minusOperation('0', '0').toString();
+      }
+    }
   }
   memoryClearClick() {
     this.savedNumber = '';
