@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {MainService} from '../main.service';
+import {IHistory} from '../types';
 
 @Component({
   selector: 'app-calculator',
@@ -16,6 +17,9 @@ export class CalculatorComponent implements OnInit {
   public isOperationClicked = false;
   public isEqualClicked = false;
   public savedNumber = '';
+  public historyArray = [];
+  public historyList: IHistory[] = [];
+  public isHistoryVisible = false;
 
   ngOnInit(): void {
   }
@@ -33,6 +37,13 @@ export class CalculatorComponent implements OnInit {
       return this.mainService.multiplyOperation(this.firstNum, this.secondNum);
     }
   }
+  addToHistory(text: string, res: string) {
+    const mock: IHistory = {
+      text,
+      result: res,
+    };
+    this.historyList.push(mock);
+  }
   calcAdditionalOperation = (op: string) => {
     let res = 0;
     if (op === '%') {
@@ -40,20 +51,21 @@ export class CalculatorComponent implements OnInit {
     }
     if (op === '√') {
       res = this.mainService.sqrtOperation(this.firstNum);
+      this.addToHistory(`sqrt(${this.firstNum}) =`, res.toString());
     }
     if (op === 'x^2') {
       res = this.mainService.sqrOperation(this.firstNum);
+      this.addToHistory(`sqr(${this.firstNum}) =`, res.toString());
     }
     if (op === '1/x') {
       res = this.mainService.oneDivToNumOperation(this.firstNum);
+      this.addToHistory(`1/(${this.firstNum}) =`, res.toString());
     }
-    console.log(op, res);
     this.text = res.toString();
     this.firstNum = res.toString();
     this.currentNum = res.toString();
   }
   clickReverseNum() {
-    console.log('clickReverseNum', this.currentNum);
     if (this.secondNum === this.currentNum) {
       this.secondNum = (parseFloat(this.secondNum) * -1).toString();
       this.currentNum = this.secondNum;
@@ -88,22 +100,24 @@ export class CalculatorComponent implements OnInit {
     }
   }
   onClickOperation = (operation: string) => {
-    console.log('eq', this.isEqualClicked);
     if (this.isEqualClicked) {
       this.text = this.mainService.putBrackets(this.firstNum);
       this.isEqualClicked = false;
     }
     if (this.clickedOperation === '') {
+      this.historyArray = [];
+      this.historyArray.push(this.currentNum);
       this.clickedOperation = operation;
       this.text += operation;
     } else {
+      this.historyArray.push(this.clickedOperation);
       if (this.secondNum === '') {
         this.clickedOperation = operation;
         this.text = this.text.substring(0, this.text.length - 1) + operation;
       } else {
+        this.historyArray.push(this.currentNum);
         this.firstNum = (this.calcBasicOperation()).toString();
         this.text = this.firstNum + operation;
-        console.log('fN', this.firstNum);
         this.secondNum = '';
         this.clickedOperation = operation;
       }
@@ -111,15 +125,21 @@ export class CalculatorComponent implements OnInit {
     this.secondNum = '';
   }
   onClickEqual = () => {
-    console.log('firstNum: ', this.firstNum);
-    console.log('operation: ', this.clickedOperation);
-    console.log('secondNum: ', this.secondNum);
+    this.historyArray.push(this.clickedOperation);
+    this.historyArray.push(this.currentNum);
+    this.historyArray.push('=');
     const res = this.calcBasicOperation();
     this.text += '=';
     this.firstNum = res.toString();
     this.currentNum = res.toString();
     this.isEqualClicked = true;
     this.clickedOperation = '';
+    const mock: IHistory = {
+      text: this.historyArray.join(' '),
+      result: res.toString(),
+    };
+    this.historyList.push(mock);
+    this.historyArray = [];
   }
   isExistDot = (numText: string) => {
     return numText.includes('.');
@@ -147,9 +167,7 @@ export class CalculatorComponent implements OnInit {
   onBackSpaceClick() {
     if (this.clickedOperation) {
       if (this.secondNum) {
-        console.log('secondNumBefore: ', this.secondNum);
         const boolCheck = this.checkMinusLastDigit(this.secondNum);
-        console.log('boolCheck', boolCheck);
         if (boolCheck === true) {
           this.secondNum = '';
           this.currentNum = '';
@@ -159,15 +177,12 @@ export class CalculatorComponent implements OnInit {
           this.currentNum = this.secondNum;
           this.text = this.mainService.putBrackets(this.firstNum) + this.clickedOperation + this.mainService.putBrackets(this.secondNum);
         }
-        console.log('secondNumAfter: ', this.secondNum);
       } else {
         this.text = this.text.substring(0, this.text.length - this.clickedOperation.length);
         this.clickedOperation = '';
       }
     } else {
-      console.log('firstNumBefore: ', this.firstNum);
       const boolCheck = this.checkMinusLastDigit(this.firstNum);
-      console.log('boolCheck', boolCheck);
       if (boolCheck === true) {
         this.onClearClick();
       } else {
@@ -175,7 +190,6 @@ export class CalculatorComponent implements OnInit {
         this.currentNum = this.firstNum;
         this.text = this.mainService.putBrackets(this.firstNum);
       }
-      console.log('firstNumAfter: ', this.firstNum);
     }
   }
   onClearEntryClick() {
@@ -203,29 +217,30 @@ export class CalculatorComponent implements OnInit {
     this.text = '';
     this.isOperationClicked = false;
     this.currentNum = '';
+    this.historyArray = [];
   }
   memorySaveClick() {
-    console.log('curSavedNum', this.currentNum);
     this.savedNumber = this.currentNum;
   }
   memoryReadClick() {
-    console.log('memRead', this.savedNumber);
     this.firstNum = this.savedNumber;
     this.currentNum = this.savedNumber;
     this.text = this.mainService.putBrackets(this.savedNumber);
   }
   memoryPlusClick() {
-    console.log('memPlus', this.currentNum);
     this.savedNumber = this.mainService.plusOperation(this.savedNumber, this.currentNum).toString();
-    console.log('savedNumAfterM+', this.savedNumber);
   }
   memoryMinusClick() {
-    console.log('memMinus', this.currentNum);
     this.savedNumber = this.mainService.minusOperation(this.savedNumber, this.currentNum).toString();
-    console.log('savedNumAfterM-', this.savedNumber);
   }
   memoryClearClick() {
     this.savedNumber = '';
+  }
+  showHistory() {
+    this.isHistoryVisible = !this.isHistoryVisible;
+  }
+  clearHistory() {
+    this.historyList = [];
   }
 
 }

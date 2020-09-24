@@ -31,6 +31,10 @@
       img {
         width: 16px;
         height: 16px;
+        cursor: pointer;
+        &:hover {
+          border: 1px solid gray;
+        }
       }
     }
     .input-field {
@@ -87,6 +91,41 @@
         border: none;
         &:hover {
           background-color: rgb(220,220,220);
+        }
+      }
+    }
+    .history {
+      position: absolute;
+      width: 264px;
+      height: 252px;
+      bottom: calc(50% - 207px);
+      background-color: lightgray;
+      .history__list {
+        height: 236px;
+        overflow: auto;
+        .history__item {
+          padding: 4px 12px;
+          text-align: right;
+          cursor: pointer;
+          .history__item-text {
+            font-size: 12px;
+          }
+          .history__item-result {
+            font-size: 24px;
+            font-weight: bolder;
+          }
+          &:hover {
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+          }
+        }
+      }
+      .trash-div {
+        padding-top: 4px;
+        padding-right: 8px;
+        img {
+          width: 16px;
+          height: 16px;
+          cursor: pointer;
         }
       }
     }
