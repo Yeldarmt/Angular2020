@@ -1,10 +1,7 @@
-<div class="container">
-  <section>
-    <input type="text" name="title" [formControl]="titleCtrl" placeholder="Название" />
-    <pre>
-        {{ titleCtrl.value | json }}
-    </pre
-    >
+<div class="container create">
+  <section class="d-flex flex-column mb-3">
+    <label>Название опросника</label>
+    <input type="text" name="title" [formControl]="titleCtrl" placeholder="Введите название проекта" />
   </section>
-
+  <app-create-question></app-create-question>
 </div>
