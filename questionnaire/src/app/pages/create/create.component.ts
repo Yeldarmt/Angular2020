@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-create',
@@ -9,7 +10,11 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 export class CreateComponent implements OnInit {
   titleCtrl = new FormControl('', [Validators.required]);
 
-  constructor() { }
+  constructor(private cookieService: CookieService) {
+    this.titleCtrl.valueChanges.subscribe((value) => {
+      this.cookieService.set('title', value);
+    });
+  }
 
   ngOnInit(): void {
   }

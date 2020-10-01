@@ -5,6 +5,7 @@ import {FillComponent} from './pages/fill/fill.component';
 import {ResultComponent} from './pages/result/result.component';
 
 const routes: Routes = [
+  {path: '', redirectTo: 'create', pathMatch: 'full'},
   {path: 'create', component: CreateComponent},
   {path: 'fill', component: FillComponent},
   {path: 'result', component: ResultComponent},

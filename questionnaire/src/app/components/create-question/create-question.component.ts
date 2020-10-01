@@ -24,7 +24,9 @@ export class CreateQuestionComponent implements OnInit {
     select: this.selectCtrl,
   });
   ngOnInit(): void {
-    // get
+    const cookieValue = JSON.parse(this.cookieService.get('questionsList'));
+    console.log('cookieValue', cookieValue);
+    this.questionsList = cookieValue;
   }
 
   addAnswer() {
@@ -45,8 +47,12 @@ export class CreateQuestionComponent implements OnInit {
     this.questionCtrl.setValue('');
     this.selectCtrl.setValue(0);
     this.answersList = [];
-    // set
+    this.cookieService.set( 'questionsList', JSON.stringify(this.questionsList) );
     console.log('QQQ: ', this.questionsList);
+  }
+  removeQuestion(question: IQuestion) {
+    this.questionsList = this.questionsList.filter((n: IQuestion) => JSON.stringify(n) !== JSON.stringify(question));
+    this.cookieService.set( 'questionsList', JSON.stringify(this.questionsList) );
   }
 
 }
