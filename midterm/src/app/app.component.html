@@ -1,2 +1,20 @@
-<mat-toolbar color="primary">Midterm Project</mat-toolbar>
+<mat-toolbar color="primary" class="pt-1">
+  <div class="d-flex justify-content-between w-100 container">
+    <span>
+    Midterm Project
+    </span>
+    <div *ngIf="token">
+      <a class="p-1" routerLink="/posts">Posts</a>
+      <a class="ml-3 p-1" routerLink="/route-based">Route Based Albums</a>
+      <a class="ml-3 p-1" routerLink="/content-projection-based">Content Projection Based Albums</a>
+    </div>
+    <button
+      class="btn btn-secondary"
+      *ngIf="token"
+      (click)="logoutClicked()"
+    >
+      Выйти
+    </button>
+  </div>
+</mat-toolbar>
 <router-outlet></router-outlet>

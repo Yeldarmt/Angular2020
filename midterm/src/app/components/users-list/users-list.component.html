@@ -1,0 +1,8 @@
+<mat-nav-list>
+  <mat-list-item
+    *ngFor="let user of users"
+    (click)="navigateToAlbum(user.id)"
+  >
+    {{ user.name }}
+  </mat-list-item>
+</mat-nav-list>

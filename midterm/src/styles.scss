@@ -2,4 +2,24 @@
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; display: flex; flex-direction: column; align-items: stretch }
+
+input {
+  border: none;
+  outline: none;
+  border-bottom: 2px solid silver;
+  padding: 8px 8px;
+  font-size: 16px;
+  &::placeholder {
+    font-size: 14px;
+  }
+}
+
+button {
+  background-color: #3f51b5;
+  color: white;
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+a {color: white; &:hover {color: white;} }
